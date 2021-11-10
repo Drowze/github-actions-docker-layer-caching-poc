@@ -8,6 +8,9 @@ on:
 jobs:
   build_no_cache:
     runs-on: ubuntu-latest
+    env:
+      SHORT_SHA: ${GITHUB_SHA:7}
+
     steps:
       - name: Dump github context
         run:   echo "$GITHUB_CONTEXT"
