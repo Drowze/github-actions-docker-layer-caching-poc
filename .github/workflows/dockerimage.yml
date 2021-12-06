@@ -12,6 +12,7 @@ jobs:
       SHORT_SHA: ${GITHUB_SHA::7}
 
     steps:
+      - uses: actions/checkout@v2
       - name: Dump github context
         run:   echo "$GITHUB_CONTEXT"
         shell: bash
@@ -20,8 +21,6 @@ jobs:
          
       - name: Dump env
         run: env
-
-      - uses: actions/checkout@v2
       - run: docker build . -t thing
   build_no_cache_buildkit:
     env:
