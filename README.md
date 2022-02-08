@@ -4,3 +4,4 @@ Some analysis to find out what approach of caching Docker builds leads to most p
 push
 pull
 sync
+sync
