@@ -3,7 +3,7 @@ name: The showdown
 on:
   push: {}
   pull_request:
-    types: [ synchronized, labeled, opened, reopened ]
+    types: [ synchronize, labeled, opened, reopened ]
 jobs:
   build_no_cache:
     runs-on: ubuntu-latest
