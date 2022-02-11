@@ -7,11 +7,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - uses: actions/github-script@v5
+      - name: Delete all partial artifacts before uploading the merged artifact
+        uses: actions/github-script@v5
         with:
           script: |
-            const { ACTIONS_RUNTIME_URL } = process.env;
-            console.log(`url: ${ACTIONS_RUNTIME_URL}`)
+            const { HttpClient } = '@actions/http-client';
+            const { BearerCredentialHttpHandler } = require('@actions/http-client/auth');
+
+            const { ACTIONS_RUNTIME_URL, ACTIONS_RUNTIME_TOKEN, GITHUB_RUN_ID } = process.env;
+            const apiVersion = '6.0-preview';
+            const artifactsUrl = `${ACTIONS_RUNTIME_URL}_apis/pipelines/workflows/${runId}/artifacts?api-version=${this.apiVersion}`;
+            const requestOptions = { 'Accept': `application/json;api-version=${this.apiVersion}` };
+
+            const client = new HttpClient('action/artifact', [new BearerCredentialHandler(ACTIONS_RUNTIME_TOKEN)];
+
+            console.log(`url: ${ACTIONS_RUNTIME_URL}`);
+            
+            (async () => {
+                const response = await client.get(listArtifactsUrl, requestOptions);
+                const body = await response.readBody();
+                console.log(body)
+            })();
+
       
       - name: Generate cache-key that expires every 60 seconds
         id: gen-cache-key
