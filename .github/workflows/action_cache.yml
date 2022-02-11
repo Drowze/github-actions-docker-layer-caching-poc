@@ -12,7 +12,9 @@ jobs:
       - name: Generate cache-key that expires every 60 seconds
         id: gen-cache-key
         run:
+          date +"%s"
           current_date=$(date +"%s")
+          expr $(date +"%s") / 60
           key=$(expr ${current_date} / 60)
           echo "${key}"
           echo "::set-output name=key::${key}"
