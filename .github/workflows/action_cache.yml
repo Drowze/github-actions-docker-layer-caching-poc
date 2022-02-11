@@ -7,10 +7,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - run: echo ${ACTIONS_RUNTIME_URL}
+      
       - name: Generate cache-key that expires every 60 seconds
         id: gen-cache-key
-        run: 
-          key=$(expr $(date +"%s") / 60)
+        run:
+          current_date=$(date +"%s")
+          key=$(expr ${current_date} / 60)
           echo "${key}"
           echo "::set-output name=key::${key}"
   
