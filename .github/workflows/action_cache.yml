@@ -7,6 +7,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - run: npm install '@actions/http-client'
+      
       - name: Delete all partial artifacts before uploading the merged artifact
         uses: actions/github-script@v5
         with:
