@@ -2,3 +2,6 @@
 
 Some analysis to find out what approach of caching Docker builds leads to most performance gain.
 push
+pull
+sync
+sync
