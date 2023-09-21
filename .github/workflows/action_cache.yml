@@ -1,6 +1,7 @@
 name: Test actions cache
 on:
   push: {}
+  
 jobs:
   cache_prime_numbers:
     runs-on: ubuntu-latest
