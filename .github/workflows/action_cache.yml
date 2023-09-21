@@ -12,8 +12,8 @@ jobs:
       - uses: actions/github-script@v5
         with:
           script: |
-            const { context } = require('@actions/github');
-            console.log(JSON.stringify(context, null, 2))
+            const github = require('@actions/github');
+            console.log(JSON.stringify(github.context, null, 2))
       
       - name: Delete all partial artifacts before uploading the merged artifact
         uses: actions/github-script@v5
