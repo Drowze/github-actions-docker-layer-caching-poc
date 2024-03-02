@@ -11,13 +11,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - run: |
+      - name: Create file
+        run: date > foo.txt
+
+      - name: Create automated pull request
+        run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          date > foo.txt
-          git switch --force-create automation-create-foo-pr
-          git add foo.txt
-          git commit -m "[auto] Test PR creation"
-          gh pr create -B master -H automation-create-foo-pr --title 'Test pull request' --body 'Created by Github action'
+
+          git switch --force-create ${BRANCH}
+          git add ${FILES_TO_COMMIT}
+          git commit -m "${COMMIT_MESSAGE}"
+
+          if ! gh pr create -B "${BASE_BRANCH}" -H "${BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}"; then
+            # PR already exists; check if it's safe then force-push
+            git log
+            git fetch
+            git log
+          fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILES_TO_COMMIT: foo.txt
+          BASE_BRANCH: ${{ github.event.repository.default_branch }}
+          HEAD_BRANCH: automation-create-foo-pr
+          COMMIT_MESSAGE: '[auto] Test PR creation'
+          PR_TITLE: 'Test pull request'
+          PR_BODY: |
+            Created by Github action.
+
+            Log: ${{ github.event.repository.http_url }}/actions/runs/${{ github.run_id }}
