@@ -25,7 +25,7 @@ jobs:
           git config user.name "github-actions[bot]"
 
           git fetch origin "${HEAD_BRANCH}" || true
-          pr_state="$(gh pr view "${HEAD_BRANCH}" --json 'state' || true)"
+          pr_state="$(gh pr view "${HEAD_BRANCH}" --json 'state' --jq '.state' || true)"
 
           # error out if:
           # - there is a pull request in OPEN state for this commit
