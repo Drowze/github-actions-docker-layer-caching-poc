@@ -45,10 +45,10 @@ jobs:
 
           if [ "$(echo "${existing_pr}" | jq '.state')" == "OPEN" ]; then
             url="$(echo "${existing_pr}" | jq '.url')"
-            echo "### Pull request updated: ${url}" >> $GITHUB_STEP_SUMMARY
+            echo "### Pull request updated 🚀 ${url}" >> $GITHUB_STEP_SUMMARY
           else
             url="$(gh pr create -B "${BASE_BRANCH}" -H "${HEAD_BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}")"
-            echo "### Pull request created: ${url}" >> $GITHUB_STEP_SUMMARY
+            echo "### Pull request created 🚀 ${url}" >> $GITHUB_STEP_SUMMARY
           fi
         env:
           GH_TOKEN: ${{ github.token }}
@@ -60,4 +60,4 @@ jobs:
           PR_BODY: |
             Created by Github action.
 
-            Log: ${{ github.event.repository.http_url }}/actions/runs/${{ github.run_id }}
+            Log: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
