@@ -1,0 +1,17 @@
+name: Test pull request creation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-pr-creation:
+    name: Create PR with foo file
+    runs-on: ubuntu-latest
+    steps:
+    
+      - run: |
+          touch foo.txt
+          git switch --force-create automation-create-foo-pr
+          git add foo.txt
+          git commit -m "[auto] Test PR creation"
+          git push origin automation-create-foo-pr
