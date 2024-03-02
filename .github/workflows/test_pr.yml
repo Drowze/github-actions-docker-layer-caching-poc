@@ -43,6 +43,11 @@ jobs:
           git commit --message "${COMMIT_MESSAGE}"
           git push --force-with-lease origin "${HEAD_BRANCH}"
 
+          echo "${existing_pr}"
+          echo "${existing_pr}" | jq '.state'
+          [[ "$(echo "${existing_pr}" | jq '.state')" == "OPEN" ]] && echo true || echo false
+          
+
           if [ "$(echo "${existing_pr}" | jq '.state')" == "OPEN" ]; then
             url="$(echo "${existing_pr}" | jq '.url')"
             echo "### Pull request updated 🚀 ${url}" >> $GITHUB_STEP_SUMMARY
