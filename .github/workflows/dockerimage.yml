@@ -4,6 +4,7 @@ on:
   push: {}
   pull_request:
     types: [ synchronize, labeled, opened, reopened ]
+  workflow_dispatch:
 jobs:
   build_no_cache:
     runs-on: ubuntu-latest
@@ -19,6 +20,18 @@ jobs:
         with:
           name: artifacts
           path: context.json
+
+      - name: Dump github.event context
+        run:   echo "$GITHUB_CONTEXT" | tee context.json
+        shell: bash
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github.event) }}
+
+      - name: Dump github.event.repository context
+        run:   echo "$GITHUB_CONTEXT" | tee context.json
+        shell: bash
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github.event.repository) }}
 
       - name: Dump env
         run: env
