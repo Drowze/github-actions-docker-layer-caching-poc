@@ -43,6 +43,10 @@ jobs:
           git commit --message "${COMMIT_MESSAGE}"
           git push --force-with-lease origin "${HEAD_BRANCH}"
 
+          echo '----'
+          echo "pr_state=${pr_state}"
+          echo '----'
+
           if [ "${pr_state}" != "OPEN" ]; then
             gh pr create -B "${BASE_BRANCH}" -H "${HEAD_BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}"
           fi
