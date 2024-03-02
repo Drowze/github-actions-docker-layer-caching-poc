@@ -19,14 +19,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
 
+          git log -n1 origin/"${BRANCH}"
+
           git switch --force-create ${BRANCH}
           git add ${FILES_TO_COMMIT}
           git commit -m "${COMMIT_MESSAGE}"
-
-          gh pr create -B "${BASE_BRANCH}" -H "${BRANCH}" --title "${PR_TITLE}" --body foobar || true
-          echo ok
-          gh pr create -B "${BASE_BRANCH}" -H "${BRANCH}" --title "${PR_TITLE}" --body ${PR_BODY} || true
-          echo ok2
           
           if ! gh pr create -B "${BASE_BRANCH}" -H "${BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}"; then
             # PR already exists; check if it's safe then force-push
