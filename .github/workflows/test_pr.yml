@@ -25,12 +25,12 @@ jobs:
           git config user.name "github-actions[bot]"
 
           git fetch origin "${HEAD_BRANCH}" || true
-          pr_state="$(gh pr view "${HEAD_BRANCH}" --json 'state' --jq '.state' || true)"
+          existing_pr="$(gh pr view "${HEAD_BRANCH}" --json 'state,url' 2>/dev/null || true)"
 
           # error out if:
           # - there is a pull request in OPEN state for this commit
           # - AND last committer was NOT a bot
-          if [ "$pr_state" == "OPEN" ]; then
+          if [ "$(echo "${existing_pr}" | jq '.state')" == "OPEN" ]; then
             author="$(git log -n1 origin/"${HEAD_BRANCH}" --format=format:'%an')"
             if [ "$author" != "github-actions[bot]" ]; then
               echo "::error title=Could not create PR - there is already an open PR that has been manually managed."
@@ -43,12 +43,13 @@ jobs:
           git commit --message "${COMMIT_MESSAGE}"
           git push --force-with-lease origin "${HEAD_BRANCH}"
 
-          echo '----'
-          echo "pr_state=${pr_state}"
-          echo '----'
-
-          if [ "${pr_state}" != "OPEN" ]; then
-            gh pr create -B "${BASE_BRANCH}" -H "${HEAD_BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}"
+          if [ "$(echo "${existing_pr}" | jq '.state')" == "OPEN" ]; then
+            url="$(echo "${existing_pr}" | jq '.url')"
+            echo "### Pull request updated: ${url}" >> $GITHUB_STEP_SUMMARY
+          else
+            create="$(gh pr create -B "${BASE_BRANCH}" -H "${HEAD_BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}")"
+            echo "${create}"
+            echo "### Pull request created: ${url}" >> $GITHUB_STEP_SUMMARY
           fi
         env:
           GH_TOKEN: ${{ github.token }}
