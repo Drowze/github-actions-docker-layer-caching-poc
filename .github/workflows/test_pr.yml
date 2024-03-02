@@ -23,6 +23,11 @@ jobs:
           git add ${FILES_TO_COMMIT}
           git commit -m "${COMMIT_MESSAGE}"
 
+          gh pr create -B "${BASE_BRANCH}" -H "${BRANCH}" --title "${PR_TITLE}" --body foobar || true
+          echo ok
+          gh pr create -B "${BASE_BRANCH}" -H "${BRANCH}" --title "${PR_TITLE}" --body ${PR_BODY} || true
+          echo ok2
+          
           if ! gh pr create -B "${BASE_BRANCH}" -H "${BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}"; then
             # PR already exists; check if it's safe then force-push
             git log
