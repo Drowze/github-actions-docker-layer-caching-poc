@@ -14,12 +14,12 @@ jobs:
       - name: Create file
         run: date > foo.txt
 
+      - run: git show-ref
+
       - name: Create automated pull request
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-
-          git log -n1 origin/"${BRANCH}"
 
           git switch --force-create ${BRANCH}
           git add ${FILES_TO_COMMIT}
