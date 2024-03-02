@@ -47,8 +47,7 @@ jobs:
             url="$(echo "${existing_pr}" | jq '.url')"
             echo "### Pull request updated: ${url}" >> $GITHUB_STEP_SUMMARY
           else
-            create="$(gh pr create -B "${BASE_BRANCH}" -H "${HEAD_BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}")"
-            echo "${create}"
+            url="$(gh pr create -B "${BASE_BRANCH}" -H "${HEAD_BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}")"
             echo "### Pull request created: ${url}" >> $GITHUB_STEP_SUMMARY
           fi
         env:
