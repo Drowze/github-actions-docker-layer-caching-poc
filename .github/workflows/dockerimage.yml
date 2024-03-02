@@ -9,33 +9,6 @@ jobs:
   build_no_cache:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump github context
-        run:   echo "$GITHUB_CONTEXT" | tee context.json
-        shell: bash
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-
-      - name: Upload github context
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifacts
-          path: context.json
-
-      - name: Dump github.event context
-        run:   echo "$GITHUB_CONTEXT" | tee context.json
-        shell: bash
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github.event) }}
-
-      - name: Dump github.event.repository context
-        run:   echo "$GITHUB_CONTEXT" | tee context.json
-        shell: bash
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github.event.repository) }}
-
-      - name: Dump env
-        run: env
-
       - uses: actions/checkout@v2
       - run: docker build . -t thing
   build_no_cache_buildkit:
