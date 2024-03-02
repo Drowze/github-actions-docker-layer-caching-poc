@@ -24,15 +24,27 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
 
-          git switch --force-create ${BRANCH}
+          git fetch origin "${HEAD_BRANCH}" || true
+          pr_state="$(gh pr view "${HEAD_BRANCH}" --json 'state' || true)"
+
+          # error out if:
+          # - there is a pull request in OPEN state for this commit
+          # - AND last committer was NOT a bot
+          if [ "$pr_state" == "OPEN" ]; then
+            author="$(git log -n1 origin/"${HEAD_BRANCH}" --format=format:'%an')"
+            if [ "$author" != "github-actions[bot]" ]; then
+              echo "::error title=Could not create PR - there is already an open PR that has been manually managed."
+              exit 1
+            fi
+          fi
+
+          git switch --force-create "${HEAD_BRANCH}"
           git add ${FILES_TO_COMMIT}
-          git commit -m "${COMMIT_MESSAGE}"
-          
-          if ! gh pr create -B "${BASE_BRANCH}" -H "${BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}"; then
-            # PR already exists; check if it's safe then force-push
-            git log
-            git fetch
-            git log
+          git commit --message "${COMMIT_MESSAGE}"
+          git push --force-with-lease origin "${HEAD_BRANCH}"
+
+          if [ "${pr_state}" != "OPEN" ]; then
+            gh pr create -B "${BASE_BRANCH}" -H "${HEAD_BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}"
           fi
         env:
           FILES_TO_COMMIT: foo.txt
