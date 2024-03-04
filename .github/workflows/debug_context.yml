@@ -4,7 +4,9 @@ on:
   pull_request: {}
   workflow_dispatch:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "0 0 */30 * *"
+  check_run:
+  check_suite:
 jobs:
   build_no_cache:
     runs-on: ubuntu-latest
