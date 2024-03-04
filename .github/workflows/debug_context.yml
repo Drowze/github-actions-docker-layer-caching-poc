@@ -6,7 +6,14 @@ on:
   schedule:
     - cron: "0 0 */30 * *"
   check_run:
+    types:
+      - created
+      - rerequested
+      - completed
+      - requested_action
   check_suite:
+    types:
+      - completed
 jobs:
   build_no_cache:
     runs-on: ubuntu-latest
