@@ -14,6 +14,10 @@ on:
   check_suite:
     types:
       - completed
+  workflow_run:
+    workflows: ["The showdown"]
+    types: [completed]
+    branches: [master]
 jobs:
   build_no_cache:
     runs-on: ubuntu-latest
