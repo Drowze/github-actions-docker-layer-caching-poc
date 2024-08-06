@@ -18,6 +18,8 @@ on:
     workflows: ["The showdown"]
     types: [completed]
     branches: [master]
+  issue_comment:
+    types: [created]
 jobs:
   build_no_cache:
     runs-on: ubuntu-latest
