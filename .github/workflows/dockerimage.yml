@@ -6,15 +6,19 @@ on:
     types: [ synchronize, labeled, opened, reopened ]
   workflow_dispatch:
     inputs:
-      environment:
+      my_env:
         description: Target environment
+        required: true
+        type: string
+      other_var:
+        description: Some var we do not submit to the other workflow
         required: true
         type: string
 jobs:
   debug_other_workflow:
     uses: ./.github/workflows/debug_context.yml
     with:
-      environment: ${{ github.event.inputs.environment }}
+      environment: ${{ github.event.inputs.my_env }}
       noop: false
       arbitrary: whatever
       other_param: 'fooooo'
