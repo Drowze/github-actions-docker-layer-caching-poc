@@ -1,4 +1,4 @@
-name: Dump env/context
+name: Dump ${{ github.event_name }}
 on:
   push: {}
   pull_request: {}
