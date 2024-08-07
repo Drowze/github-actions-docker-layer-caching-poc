@@ -5,7 +5,19 @@ on:
   pull_request:
     types: [ synchronize, labeled, opened, reopened ]
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        required: true
+        type: string
 jobs:
+  debug_other_workflow:
+    uses: ./.github/workflows/debug_context.yml
+    with:
+      environment: ${{ github.event.inputs.environment }}
+      noop: false
+      arbitrary: whatever
+      other_param: 'fooooo'
   debug_context:
     runs-on: ubuntu-latest
     steps:
