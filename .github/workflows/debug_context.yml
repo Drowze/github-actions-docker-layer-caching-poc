@@ -45,6 +45,11 @@ jobs:
   build_no_cache:
     runs-on: ubuntu-latest
     steps:
+      - name: Set some output
+        id: test-output
+        run: echo "something=someone" >> "$GITHUB_OUTPUT"
+      - name: Set some other output
+        run: echo "konata=izumi" >> "$GITHUB_OUTPUT"
       - name: Dump github context
         run:   echo "$GITHUB_CONTEXT" | tee context.json
         shell: bash
