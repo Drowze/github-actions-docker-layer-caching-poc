@@ -4,6 +4,26 @@ on:
   push: {}
   pull_request: {}
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        required: true
+        type: choice
+        options:
+          - dev
+          - stage
+          - prod
+      noop:
+        description: Dry run - skip pushing changes to ACR or infra repo
+        required: true
+        default: false
+        type: boolean
+      arbitrary:
+        description: Arbitrary string
+        required: true
+        default: foobar
+        type: string
+
   schedule:
     - cron: "0 0 */30 * *"
   check_run:
