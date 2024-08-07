@@ -3,6 +3,27 @@ run-name: Dump (${{ github.event_name }})
 on:
   push: {}
   pull_request: {}
+  workflow_call:
+    inputs:
+      environment:
+        description: Target environment
+        required: true
+        type: string
+      noop:
+        description: Dry run - skip pushing changes to ACR or infra repo
+        required: true
+        default: false
+        type: boolean
+      arbitrary:
+        description: Arbitrary string
+        required: true
+        default: foobar
+        type: string
+      other_param:
+        description: Some param exclusive to workflow_call
+        required: true
+        default: foobar
+        type: string
   workflow_dispatch:
     inputs:
       environment:
